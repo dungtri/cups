@@ -6,7 +6,7 @@ Docker image including CUPS print server and printing drivers (installed from th
 
 ## Run the Cups server
 ```bash
-docker run -d -p 631:631 -v /var/run/dbus:/var/run/dbus --name cupsd dungtri/cupsd
+docker run -e CUPS_USER_ADMIN=admin -e CUPS_USER_PASSWORD=secr3t -p 6631:631/tcp aadl/cups-alpine
 ```
 __Note__: The admin user/password for the Cups server is `print`/`print`
 
