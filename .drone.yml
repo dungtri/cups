@@ -13,7 +13,7 @@ steps:
   image: docker:git
   commands:
   - git clone https://github.com/dungtri/cups.git .
-  - git checkout v1.2.1
+  - git checkout master
 
 - name: build
   image: plugins/docker
@@ -51,7 +51,7 @@ steps:
   image: docker:git
   commands:
   - git clone https://github.com/dungtri/cups.git .
-  - git checkout v1.2.1
+  - git master
 
 - name: build
   image: plugins/docker
@@ -89,7 +89,7 @@ steps:
   image: docker:git
   commands:
   - git clone https://github.com/dungtri/cups.git .
-  - git checkout v1.2.1
+  - git master
 
 - name: build
   image: plugins/docker
