@@ -6,5 +6,5 @@ Docker image including CUPS print server.
 
 ## Run the Cups server
 ```bash
-docker run -e CUPS_USER_ADMIN=admin -e CUPS_USER_PASSWORD=secr3t -p 6631:631/tcp aadl/cups-alpine
+docker run -e CUPS_USER_ADMIN=admin -e CUPS_USER_PASSWORD=secr3t -p 6631:631/tcp dungtri/cups
 ```
