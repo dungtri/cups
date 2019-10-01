@@ -1,42 +1,21 @@
-ARG BASE_USER
-ARG MAINTAINER
-FROM ${BASE_USER}/debian:testing
-MAINTAINER $MAINTAINER
+FROM alpine:edge
 
-# Install Packages (basic tools, cups, basic drivers, HP drivers)
-RUN apt-get update \
-&& apt-get install -y \
-  sudo \
-  whois \
-  cups \
-  cups-client \
-  cups-bsd \
-  cups-filters \
-  foomatic-db-compressed-ppds \
-  printer-driver-all \
-  openprinting-ppds \
-  hpijs-ppds \
-  hp-ppd \
-  hplip \
-  smbclient \
-&& apt-get clean \
-&& rm -rf /var/lib/apt/lists/*
+MAINTAINER Ann Arbor District Library <github@aadl.org>
 
-# Add user and disable sudo password checking
-RUN useradd \
-  --groups=sudo,lp,lpadmin \
-  --create-home \
-  --home-dir=/home/print \
-  --shell=/bin/bash \
-  --password=$(mkpasswd print) \
-  print \
-&& sed -i '/%sudo[[:space:]]/ s/ALL[[:space:]]*$/NOPASSWD:ALL/' /etc/sudoers
+RUN apk add --update --no-cache \
+	cups cups-libs cups-pdf cups-client cups-filters && \
+	sed -i 's/Listen localhost:631/Listen 0.0.0.0:631/' /etc/cups/cupsd.conf && \
+	sed -i 's/<Location \/>/<Location \/>\n  Allow All/' /etc/cups/cupsd.conf && \
+	sed -i 's/<Location \/admin>/<Location \/admin>\n  Allow All\n  Require user @SYSTEM/' /etc/cups/cupsd.conf && \
+	sed -i 's/<Location \/admin\/conf>/<Location \/admin\/conf>\n  Allow All/' /etc/cups/cupsd.conf && \
+	echo "ServerAlias *" >> /etc/cups/cupsd.conf && \
+	echo "DefaultEncryption Never" >> /etc/cups/cupsd.conf
 
-# Configure the service's to be reachable
-RUN /usr/sbin/cupsd \
-  && while [ ! -f /var/run/cups/cupsd.pid ]; do sleep 1; done \
-  && cupsctl --remote-admin --remote-any --share-printers \
-  && kill $(cat /var/run/cups/cupsd.pid)
+VOLUME /etc/cups/ /var/log/cups /var/spool/cups /var/spool/cups-pdf /var/cache/cups
 
-# Default shell
-CMD ["/usr/sbin/cupsd", "-f"]
+COPY start-cups.sh /root/start-cups.sh
+RUN chmod +x /root/start-cups.sh
+
+CMD ["/root/start-cups.sh"]
+
+EXPOSE 631
