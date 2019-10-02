@@ -1,21 +1,39 @@
-FROM alpine:edge
+FROM resin/rpi-raspbian
+MAINTAINER Ammon Sarver <manofarms@gmail.com>
 
-MAINTAINER Ann Arbor District Library <github@aadl.org>
+ENV DEBIAN_FRONTEND noninteractive
 
-RUN apk add --update --no-cache \
-	cups cups-libs cups-client cups-filters && \
-	sed -i 's/Listen localhost:631/Listen 0.0.0.0:631/' /etc/cups/cupsd.conf && \
-	sed -i 's/<Location \/>/<Location \/>\n  Allow All/' /etc/cups/cupsd.conf && \
-	sed -i 's/<Location \/admin>/<Location \/admin>\n  Allow All\n  Require user @SYSTEM/' /etc/cups/cupsd.conf && \
-	sed -i 's/<Location \/admin\/conf>/<Location \/admin\/conf>\n  Allow All/' /etc/cups/cupsd.conf && \
-	echo "ServerAlias *" >> /etc/cups/cupsd.conf && \
-	echo "DefaultEncryption Never" >> /etc/cups/cupsd.conf
+RUN apt-get update && apt-get install -y \
+  sudo \
+  locales \
+  whois \
+  cups \
+  cups-client \
+  cups-bsd \
+  printer-driver-all \
+  hpijs-ppds \
+  hp-ppd \
+  hplip 
 
-VOLUME /etc/cups/ /var/log/cups /var/spool/cups /var/spool/cups-pdf /var/cache/cups
+RUN sed -i "s/^#\ \+\(en_US.UTF-8\)/\1/" /etc/locale.gen \
+  && locale-gen en_US en_US.UTF-8
 
-COPY start-cups.sh /root/start-cups.sh
-RUN chmod +x /root/start-cups.sh
+ENV LANG=en_US.UTF-8 \
+  LC_ALL=en_US.UTF-8 \
+  LANGUAGE=en_US:en
 
-CMD ["/root/start-cups.sh"]
+RUN useradd \
+  --groups=sudo,lp,lpadmin \
+  --create-home \
+  --home-dir=/home/print \
+  --shell=/bin/bash \
+  --password=$(mkpasswd print) \
+  print \
+  && sed -i '/%sudo[[:space:]]/ s/ALL[[:space:]]*$/NOPASSWD:ALL/' /etc/sudoers \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  && mkdir /var/lib/apt/lists/partial
 
+COPY etc-cups/cupsd.conf /etc/cups/cupsd.conf
 EXPOSE 631
+ENTRYPOINT ["/usr/sbin/cupsd", "-f"]
