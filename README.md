@@ -5,6 +5,16 @@
 Docker image including CUPS print server.
 
 ## Run the Cups server
+Use lsusb command to display the bus and device ids on which port your usb printer is connected.
 ```bash
-docker run -e CUPS_USER_ADMIN=admin -e CUPS_USER_PASSWORD=secr3t -p 6631:631/tcp dungtri/cups
+$ lsusb
+```
+
+```bash
+$ docker run --name cups -d \
+    -e CUPS_USER_ADMIN=admin \
+    -e CUPS_USER_PASSWORD=s@cr@t \
+    -p 631:631/tcp \
+    --device=/dev/bus/usb/xxx/xxx \
+    dungtri/cups
 ```
