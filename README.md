@@ -1,4 +1,4 @@
-# CUPS print server image 
+# CUPS print server image
 [![Build Status](https://drone.dungtri.be/api/badges/dungtri/cups/status.svg)](https://drone.dungtri.be/dungtri/cups)
 
 ## Overview
