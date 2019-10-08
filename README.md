@@ -21,3 +21,11 @@ $ docker run --name cups -d \
     --device=/dev/bus/usb/xxx/xxx \
     dungtri/cups
 ```
+
+## Build the ubuntu image
+
+Checkout the project and run the following command :
+
+```bash
+$ ./build
+```
