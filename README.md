@@ -12,7 +12,9 @@ Use lsusb command to display the bus and device ids on which port your usb print
 ```bash
 $ lsusb
 ```
+
 Return as example :
+
 Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
 Bus **001** Device **002**: ID 04f9:004a Brother Industries, Ltd
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
