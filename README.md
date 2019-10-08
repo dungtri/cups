@@ -2,7 +2,10 @@
 [![Build Status](https://drone.dungtri.be/api/badges/dungtri/cups/status.svg)](https://drone.dungtri.be/dungtri/cups)
 
 ## Overview
-Docker image including CUPS print server.
+Docker images including CUPS print server:
+- Ubuntu version : A special version with official brother drivers targeted on i386 architecture.
+- Alpine version : the image is very lightweight and can be run on multiple architectures : armv7, aarch64 and amd64.
+
 
 ## Run the Cups server
 Use lsusb command to display the bus and device ids on which port your usb printer is connected.
