@@ -4,7 +4,9 @@
 ## Overview
 Docker images including CUPS print server:
 - Ubuntu version : A special version with official brother drivers targeted on i386 architecture.
-- Alpine version : the image is very lightweight and can be run on multiple architectures : armv7, aarch64 and amd64.
+https://cloud.docker.com/repository/docker/dungtri/cups-ubuntu-386
+- As alternative an Linux Alpine version : the image is very lightweight and can be run on multiple architectures : armv7, aarch64 and amd64.
+https://cloud.docker.com/repository/docker/dungtri/cups
 
 
 ## Run the Cups server
