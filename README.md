@@ -11,10 +11,13 @@ Docker images including CUPS print server:
 Use lsusb command to display the bus and device ids on which port your usb printer is connected.
 ```bash
 $ lsusb
+```
+Return as example :
 Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
 Bus **001** Device **002**: ID 04f9:004a Brother Industries, Ltd
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-```
+
+Then use the device path /dev/bus/usb/001/002
 
 ```bash
 $ docker run --name cups -d \
